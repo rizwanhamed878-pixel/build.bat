@@ -1,0 +1,28 @@
+@echo off
+echo Building MR Mandub Top Performer ERP System...
+
+:: Create distribution directory
+if not exist "dist" mkdir dist
+
+:: Package Node.js application
+cd src\backend
+npm install
+npx pkg app.js --target node18-win-x64 --output ../../dist/MRMandubERP.exe
+cd ../..
+
+:: Build NSIS installer
+if exist "MRMandubTopPerformerERP_Setup.exe" del "MRMandubTopPerformerERP_Setup.exe"
+"C:\Program Files (x86)\NSIS\makensis.exe" installer\setup.nsi
+
+:: Create source code ZIP
+7z a -tzip dist\MRMandub_Source.zip src\ installer\ README.txt build.bat
+
+echo.
+echo ✅ Build completed successfully!
+echo.
+echo 📦 Distribution Files:
+echo    - dist\MRMandubTopPerformerERP_Setup.exe (Windows Installer)
+echo    - dist\MRMandub_Source.zip (Complete Source Code)
+echo.
+echo 🚀 Ready for distribution!
+pause
